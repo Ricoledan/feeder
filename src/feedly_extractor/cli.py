@@ -1,4 +1,4 @@
-"""Command-line interface for the Feedly Extractor."""
+"""Command-line interface for Feeder."""
 
 import argparse
 import sys
@@ -21,25 +21,25 @@ def create_parser() -> argparse.ArgumentParser:
         epilog="""
 Examples:
   # Extract articles from the past week
-  python feedly_extractor.py
+  feeder
 
   # Extract articles from the past 3 days
-  python feedly_extractor.py --days 3
+  feeder --days 3
 
   # Extract articles from a specific date range
-  python feedly_extractor.py --start-date 2024-01-01 --end-date 2024-01-07
+  feeder --start-date 2024-01-01 --end-date 2024-01-07
 
   # Extract only unread articles
-  python feedly_extractor.py --unread-only
+  feeder --unread-only
 
   # Extract from a specific category
-  python feedly_extractor.py --category "Tech News"
+  feeder --category "Tech News"
 
   # Limit to 100 articles and save as JSON only
-  python feedly_extractor.py --max-articles 100 --format json
+  feeder --max-articles 100 --format json
 
   # Custom output filename
-  python feedly_extractor.py --output my_articles
+  feeder --output my_articles
         """
     )
 
@@ -156,7 +156,7 @@ def main() -> None:
 
         # Get articles
         if not args.quiet:
-            print("🚀 Starting Feedly Articles Extractor...")
+            print("Starting Feeder...")
 
         # Generate output filename prefix
         output_prefix = generate_output_filename(args.output)

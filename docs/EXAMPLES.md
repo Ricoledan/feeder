@@ -1,4 +1,4 @@
-# Feedly Extractor Examples
+# Feeder Examples
 
 ## Working with Feedly Folders
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Feedly Article Extractor
+Feeder
 
 A command-line tool to fetch articles from your Feedly feeds with flexible date ranges
 and export options.

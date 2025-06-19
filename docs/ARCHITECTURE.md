@@ -1,11 +1,11 @@
 # Project Architecture
 
-This document describes the modular architecture of the Feedly Article Extractor.
+This document describes the modular architecture of Feeder.
 
 ## Project Structure
 
 ```
-feedly-article-extractor/
+feeder/
 ├── src/
 │   └── feedly_extractor/
 │       ├── __init__.py          # Package initialization

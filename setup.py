@@ -1,4 +1,4 @@
-"""Setup configuration for the Feedly Article Extractor package."""
+"""Setup configuration for the Feeder package."""
 
 from setuptools import setup, find_packages
 from pathlib import Path
@@ -8,14 +8,14 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
 setup(
-    name="feedly-article-extractor",
+    name="feeder",
     version="1.0.0",
     author="Ricardo Ledan",
     author_email="your.email@example.com",
     description="A command-line tool to extract articles from Feedly feeds",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/feedly-article-extractor",
+    url="https://github.com/ricoledan/feeder",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     classifiers=[
@@ -37,7 +37,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "feedly-extractor=feedly_extractor.cli:main",
+            "feeder=feedly_extractor.cli:main",
         ],
     },
     include_package_data=True,

@@ -1,4 +1,4 @@
-# Feedly Articles Extractor
+# Feeder
 
 A powerful command-line tool to extract articles from your Feedly feeds with flexible filtering, date ranges, and export options.
 
@@ -14,25 +14,44 @@ A powerful command-line tool to extract articles from your Feedly feeds with fle
 - **Progressive Saving**: Articles are saved as they're fetched (no data loss on interruption)
 - **Modular Architecture**: Clean, maintainable code structure
 
-## Setup
+## Installation
 
-1. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Option 1: Install as Package (Recommended)
+```bash
+# Clone the repository
+git clone https://github.com/ricoledan/feeder.git
+cd feeder
 
-2. **Get Your Feedly Access Token**
+# Install the package
+pip install -e .
+
+# Use via CLI
+feeder --help
+```
+
+### Option 2: Manual Setup
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Use directly
+python feedly_extractor.py --help
+```
+
+## Configuration
+
+1. **Get Your Feedly Access Token**
    - Go to [https://feedly.com/v3/auth/dev](https://feedly.com/v3/auth/dev)
    - Log in to your Feedly account
    - Copy the access token that appears
 
-3. **Configure Environment Variables**
+2. **Configure Environment Variables**
    ```bash
-   # Copy template
+   # Copy template (if it exists)
    cp .env.template .env
    
-   # Edit .env and add your token
-   FEEDLY_ACCESS_TOKEN=your_actual_token_here
+   # Or create .env file manually
+   echo "FEEDLY_ACCESS_TOKEN=your_actual_token_here" > .env
    ```
 
 ## Usage
@@ -43,77 +62,77 @@ If you've organized your feeds into folders in Feedly, you can fetch articles fr
 
 ```bash
 # List all your Feedly folders
-python feedly_extractor.py --list-categories
+feeder --list-categories
 
-# Fetch from a specific folder (e.g., "Tech News")
-python feedly_extractor.py --category "Tech News" --days 7
+# Fetch from a specific folder (e.g., "Tech News")  
+feeder --category "Tech News" --days 7
 
 # Fetch from a folder with partial name matching
-python feedly_extractor.py --category "tech" --days 7
+feeder --category "tech" --days 7
 ```
 
 ### Basic Examples
 
 ```bash
 # Extract articles from the past week (default)
-python feedly_extractor.py
+feeder
 
 # Extract articles from the past 3 days
-python feedly_extractor.py --days 3
+feeder --days 3
 
 # Extract only unread articles
-python feedly_extractor.py --unread-only
+feeder --unread-only
 
 # Extract from a specific Feedly folder/category
-python feedly_extractor.py --category "Tech News"
+feeder --category "Tech News"
 
 # List all your Feedly folders
-python feedly_extractor.py --list-categories
+feeder --list-categories
 
 # Limit to 100 articles
-python feedly_extractor.py --max-articles 100
+feeder --max-articles 100
 ```
 
 ### Date Range Examples
 
 ```bash
 # Extract articles from a specific date range
-python feedly_extractor.py --start-date 2024-01-01 --end-date 2024-01-07
+feeder --start-date 2024-01-01 --end-date 2024-01-07
 
 # Extract articles from January 1st to now
-python feedly_extractor.py --start-date 2024-01-01
+feeder --start-date 2024-01-01
 
 # Extract articles from the past month
-python feedly_extractor.py --days 30
+feeder --days 30
 ```
 
 ### Output Format Examples
 
 ```bash
 # Save only as CSV
-python feedly_extractor.py --format csv
+feeder --format csv
 
 # Save only as JSON
-python feedly_extractor.py --format json
+feeder --format json
 
 # Save only URLs as text file
-python feedly_extractor.py --format urls
+feeder --format urls
 
 # Custom output filename
-python feedly_extractor.py --output my_articles
+feeder --output my_articles
 ```
 
 ### Advanced Examples
 
 ```bash
 # Quiet mode (no progress output)
-python feedly_extractor.py --quiet
+feeder --quiet
 
 # List available categories
-python feedly_extractor.py --list-categories
+feeder --list-categories
 
 # Complex query: Tech articles from past 2 weeks, unread only, max 50
-python feedly_extractor.py --category "Tech" --days 14 --unread-only --max-articles 50 --output tech_backlog
+feeder --category "Tech" --days 14 --unread-only --max-articles 50 --output tech_backlog
 ```
 
 ## Command Line Options
@@ -171,10 +190,10 @@ By default, articles are saved **progressively** as they're fetched, which means
 
 ```bash
 # Articles are saved in batches as they're fetched (default behavior)
-python feedly_extractor.py --days 30 --category "Tech"
+feeder --days 30 --category "Tech"
 
 # Disable progressive saving (save all at once at the end)
-python feedly_extractor.py --days 7 --no-progressive-save
+feeder --days 7 --no-progressive-save
 ```
 
 **Progressive saving output:**
@@ -226,18 +245,18 @@ Since you mentioned wanting to use this with NotebookLM, here are some tips:
 
 1. **Use URL format for quick import**:
    ```bash
-   python feedly_extractor.py --format urls --days 7
+   feeder --format urls --days 7
    ```
 
 2. **Generate CSV for metadata**:
    ```bash
-   python feedly_extractor.py --format csv --days 7
+   feeder --format csv --days 7
    ```
    Then you can manually select interesting articles to add to NotebookLM.
 
 3. **Filter by category for focused research**:
    ```bash
-   python feedly_extractor.py --category "AI" --days 30 --format urls
+   feeder --category "AI" --days 30 --format urls
    ```
 
 4. **Create a weekly automation**:
@@ -273,10 +292,10 @@ pip install --upgrade requests python-dotenv
 python -c "import os; from dotenv import load_dotenv; load_dotenv(); print('Token loaded:', bool(os.getenv('FEEDLY_ACCESS_TOKEN')))"
 
 # Check available categories
-python feedly_extractor.py --list-categories
+feeder --list-categories
 
 # Run with debug info
-python feedly_extractor.py --days 1 --max-articles 5
+feeder --days 1 --max-articles 5
 ```
 
 ## Documentation

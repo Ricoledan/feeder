@@ -1,11 +1,11 @@
 """
-Feedly Article Extractor Package
+Feeder Package
 
 A tool for extracting articles from Feedly feeds with flexible filtering and export options.
 """
 
 __version__ = "1.0.0"
-__author__ = "Your Name"
+__author__ = "Ricardo Ledan"
 
 from .client import FeedlyClient
 from .extractor import ArticleExtractor
