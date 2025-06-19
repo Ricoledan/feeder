@@ -4,15 +4,15 @@ A powerful command-line tool to extract articles from your Feedly feeds with fle
 
 ## Features
 
-- 🗓️ **Flexible Date Ranges**: Extract articles from the past N days or specific date ranges
-- 📁 **Category Filtering**: Filter by specific Feedly categories/folders
-- 📖 **Read Status**: Option to fetch only unread articles
-- 🔢 **Article Limits**: Set maximum number of articles to extract
-- 💾 **Multiple Formats**: Export to CSV, JSON, or plain text URLs
-- 🔧 **CLI Interface**: Full command-line interface with helpful options
-- 🔒 **Secure**: Uses environment variables for API tokens
-- 💾 **Progressive Saving**: Articles are saved as they're fetched (no data loss on interruption)
-- 🏗️ **Modular Architecture**: Clean, maintainable code structure
+- **Flexible Date Ranges**: Extract articles from the past N days or specific date ranges
+- **Category Filtering**: Filter by specific Feedly categories/folders
+- **Read Status**: Option to fetch only unread articles
+- **Article Limits**: Set maximum number of articles to extract
+- **Multiple Formats**: Export to CSV, JSON, or plain text URLs
+- **CLI Interface**: Full command-line interface with helpful options
+- **Secure**: Uses environment variables for API tokens
+- **Progressive Saving**: Articles are saved as they're fetched (no data loss on interruption)
+- **Modular Architecture**: Clean, maintainable code structure
 
 ## Setup
 
