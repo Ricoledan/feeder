@@ -239,29 +239,6 @@ feeder --days 7 --no-progressive-save
 - Remove filters like `--unread-only` or `--category`
 - Check if you have any articles in your Feedly
 
-## Tips for NotebookLM Integration
-
-Since you mentioned wanting to use this with NotebookLM, here are some tips:
-
-1. **Use URL format for quick import**:
-   ```bash
-   feeder --format urls --days 7
-   ```
-
-2. **Generate CSV for metadata**:
-   ```bash
-   feeder --format csv --days 7
-   ```
-   Then you can manually select interesting articles to add to NotebookLM.
-
-3. **Filter by category for focused research**:
-   ```bash
-   feeder --category "AI" --days 30 --format urls
-   ```
-
-4. **Create a weekly automation**:
-   Set up a cron job or scheduled task to run this weekly and save URLs to a consistent location.
-
 ## API Rate Limits
 
 The Feedly API has rate limits. The script includes small delays between requests to be respectful. If you encounter rate limiting:
