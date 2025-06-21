@@ -51,6 +51,7 @@ class ArticleExtractor:
         all_articles = []
         continuation = None
         page = 1
+        current_delay = options.api_delay
 
         while True:
             if not options.quiet:
@@ -96,6 +97,13 @@ class ArticleExtractor:
                     print(f"   🛑 Reached maximum article limit: {options.max_articles}")
                 all_articles = all_articles[:options.max_articles]
                 break
+            
+            # Check if we're approaching rate limits
+            if len(all_articles) >= Config.SAFE_ARTICLE_LIMIT:
+                if not options.quiet:
+                    print(f"   ⚠️  Approaching safe limit ({Config.SAFE_ARTICLE_LIMIT} articles)")
+                    print("   💡 Consider using --max-articles to limit extraction")
+                break
 
             # Check if there are more pages
             continuation = data.get('continuation')
@@ -103,7 +111,15 @@ class ArticleExtractor:
                 break
 
             page += 1
-            time.sleep(options.api_delay)  # Be nice to the API
+            
+            # Progressive delay increases as we fetch more articles
+            if len(all_articles) >= Config.PROGRESSIVE_DELAY_THRESHOLD:
+                delay_multiplier = min(3.0, len(all_articles) / Config.PROGRESSIVE_DELAY_THRESHOLD)
+                current_delay = min(Config.MAX_DELAY, options.api_delay * delay_multiplier)
+                if not options.quiet and page % 5 == 0:  # Show delay info every 5 pages
+                    print(f"   ⏱️  Using {current_delay:.1f}s delay (progressive rate limiting)")
+            
+            time.sleep(current_delay)  # Be nice to the API
 
         # Finalize progressive saving
         if progressive_saver:

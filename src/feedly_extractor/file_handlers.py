@@ -3,6 +3,8 @@
 import csv
 import json
 import os
+from datetime import datetime
+from pathlib import Path
 from typing import List, Dict, Any
 
 from .models import Article
@@ -12,6 +14,24 @@ class FileHandler:
     """Handles saving articles in various formats."""
     
     @staticmethod
+    def _ensure_output_dir(filepath: str) -> str:
+        """Ensure output directory exists and return full path"""
+        Path(filepath).parent.mkdir(parents=True, exist_ok=True)
+        return filepath
+    
+    @staticmethod
+    def _get_output_path(filename: str) -> str:
+        """Get standardized output path in data/exports directory"""
+        if os.path.isabs(filename):
+            return filename
+        
+        # Create data/exports directory structure
+        base_dir = Path.cwd() / "data" / "exports"
+        date_dir = base_dir / datetime.now().strftime("%Y-%m-%d")
+        
+        return str(date_dir / filename)
+    
+    @staticmethod
     def save_to_csv(articles: List[Article], filename: str) -> None:
         """Save articles to CSV file"""
         if not articles:
@@ -19,8 +39,9 @@ class FileHandler:
             return
 
         article_dicts = [article.to_dict() for article in articles]
+        output_path = FileHandler._ensure_output_dir(FileHandler._get_output_path(filename))
         
-        with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
             fieldnames = article_dicts[0].keys()
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -28,12 +49,14 @@ class FileHandler:
             for article_dict in article_dicts:
                 writer.writerow(article_dict)
 
-        print(f"💾 Saved {len(articles)} articles to {filename}")
+        print(f"💾 Saved {len(articles)} articles to {output_path}")
     
     @staticmethod
     def init_csv_file(filename: str, fieldnames: List[str]) -> None:
         """Initialize CSV file with headers"""
-        with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        output_path = FileHandler._ensure_output_dir(FileHandler._get_output_path(filename))
+        
+        with open(output_path, 'w', newline='', encoding='utf-8') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
     
@@ -44,8 +67,9 @@ class FileHandler:
             return
         
         article_dicts = [article.to_dict() for article in articles]
+        output_path = FileHandler._get_output_path(filename)
             
-        with open(filename, 'a', newline='', encoding='utf-8') as csvfile:
+        with open(output_path, 'a', newline='', encoding='utf-8') as csvfile:
             fieldnames = article_dicts[0].keys()
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             for article_dict in article_dicts:
@@ -55,22 +79,24 @@ class FileHandler:
     def save_to_json(articles: List[Article], filename: str) -> None:
         """Save articles to JSON file"""
         article_dicts = [article.to_dict() for article in articles]
+        output_path = FileHandler._ensure_output_dir(FileHandler._get_output_path(filename))
         
-        with open(filename, 'w', encoding='utf-8') as jsonfile:
+        with open(output_path, 'w', encoding='utf-8') as jsonfile:
             json.dump(article_dicts, jsonfile, indent=2, ensure_ascii=False)
 
-        print(f"💾 Saved {len(articles)} articles to {filename}")
+        print(f"💾 Saved {len(articles)} articles to {output_path}")
 
     @staticmethod
     def save_urls_only(articles: List[Article], filename: str) -> None:
         """Save only URLs to a text file"""
         urls = [article.url for article in articles if article.url]
+        output_path = FileHandler._ensure_output_dir(FileHandler._get_output_path(filename))
 
-        with open(filename, 'w', encoding='utf-8') as urlfile:
+        with open(output_path, 'w', encoding='utf-8') as urlfile:
             for url in urls:
                 urlfile.write(url + '\n')
 
-        print(f"🔗 Saved {len(urls)} URLs to {filename}")
+        print(f"🔗 Saved {len(urls)} URLs to {output_path}")
     
     @staticmethod
     def append_urls(articles: List[Article], filename: str) -> None:
@@ -79,7 +105,9 @@ class FileHandler:
         if not urls:
             return
             
-        with open(filename, 'a', encoding='utf-8') as urlfile:
+        output_path = FileHandler._get_output_path(filename)
+        
+        with open(output_path, 'a', encoding='utf-8') as urlfile:
             for url in urls:
                 urlfile.write(url + '\n')
 
@@ -90,9 +118,11 @@ class ProgressiveSaver:
     def __init__(self, output_prefix: str, output_format: str):
         self.output_prefix = output_prefix
         self.output_format = output_format
-        self.csv_file = f"{output_prefix}.csv" if output_format in ['all', 'csv'] else None
-        self.json_file = f"{output_prefix}.json" if output_format in ['all', 'json'] else None
-        self.urls_file = f"{output_prefix}_urls.txt" if output_format in ['all', 'urls'] else None
+        
+        # Use FileHandler._get_output_path for consistent paths
+        self.csv_file = FileHandler._get_output_path(f"{output_prefix}.csv") if output_format in ['all', 'csv'] else None
+        self.json_file = FileHandler._get_output_path(f"{output_prefix}.json") if output_format in ['all', 'json'] else None
+        self.urls_file = FileHandler._get_output_path(f"{output_prefix}_urls.txt") if output_format in ['all', 'urls'] else None
         self.files_initialized = False
         self.saved_count = 0
         
@@ -102,11 +132,14 @@ class ProgressiveSaver:
     def _initialize_files(self) -> None:
         """Initialize output files"""
         if self.csv_file:
+            FileHandler._ensure_output_dir(self.csv_file)
             open(self.csv_file, 'w').close()
         if self.json_file:
+            FileHandler._ensure_output_dir(self.json_file)
             with open(self.json_file, 'w') as f:
                 f.write('[\n')  # Start JSON array
         if self.urls_file:
+            FileHandler._ensure_output_dir(self.urls_file)
             open(self.urls_file, 'w').close()
     
     def save_batch(self, articles: List[Article], quiet: bool = False) -> None:

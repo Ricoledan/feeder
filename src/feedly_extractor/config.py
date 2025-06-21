@@ -18,6 +18,11 @@ class Config:
     API_DELAY = 0.5  # Increased from 0.1 to be more respectful of rate limits
     RATE_LIMIT_DELAY = 60  # Wait 60 seconds when rate limited
     
+    # Rate Limiting Prevention
+    SAFE_ARTICLE_LIMIT = 5000  # Conservative limit to avoid rate limiting
+    PROGRESSIVE_DELAY_THRESHOLD = 2000  # Start increasing delays after this many articles
+    MAX_DELAY = 3.0  # Maximum delay between requests
+    
     # Application Limits
     MAX_DATE_RANGE_DAYS = 365
     DEFAULT_DAYS_BACK = 7
